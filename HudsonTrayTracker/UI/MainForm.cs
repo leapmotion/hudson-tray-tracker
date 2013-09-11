@@ -310,6 +310,7 @@ namespace Hudson.TrayTracker.UI
             {
                 get { return FormatBuildDetails(LastSuccessBuild); }
             }
+            
             public BuildDetails LastFailureBuild
             {
                 get { return Project.LastFailedBuild; }
@@ -318,14 +319,24 @@ namespace Hudson.TrayTracker.UI
             {
                 get { return FormatBuildDetails(LastFailureBuild); }
             }
+             public BuildDetails LastFailureReason
+            {
+                get { return Project.LastFailedBuild; }
+            }
+            public string LastFailureReasonBuildStr
+            {
+                get { return FormatLastFailureReason(LastFailureReason); }
+            }
             public string LastSuccessUsers
             {
                 get { return FormatUsers(Project.LastSuccessfulBuild); }
             }
             public string LastFailureUsers
             {
-                get { return FormatUsers(Project.LastFailedBuild); }
+                get { return FormatFailureUsers(Project.LastFailedBuild); }
             }
+            
+            
             public string ClaimedBy
             {
                 get
@@ -348,7 +359,6 @@ namespace Hudson.TrayTracker.UI
                     return Project.LastFailedBuild.ClaimDetails.Reason;
                 }
             }
-
             private string FormatBuildDetails(BuildDetails details)
             {
                 if (details == null)
@@ -359,9 +369,34 @@ namespace Hudson.TrayTracker.UI
             }
             private string FormatUsers(BuildDetails details)
             {
+                string res;
+
                 if (details == null)
                     return "-";
-                string res = StringUtils.Join(details.Users, HudsonTrayTrackerResources.BuildDetails_UserSeparator);
+               res = StringUtils.Join(details.Users, HudsonTrayTrackerResources.BuildDetails_UserSeparator);
+               return res;
+            }
+            public string FormatFailureUsers(BuildDetails details)
+            {
+                string res = null;
+                if (details == null)
+                    return "-";
+                if (details.FailureReason == "Server issue / Other") 
+                    res = StringUtils.Join(details.Users, HudsonTrayTrackerResources.BuildFailure_UserSeparator);
+                else if (details.FailureReason == "New Commit")
+                    res = string.Format(HudsonTrayTrackerResources.BuildFailure_CommitterName, details.CommitterName);
+                return res;
+            }
+
+            private string FormatLastFailureReason(BuildDetails details)
+            {
+                string res = null;
+                if (details == null)
+                    return "-";
+                if (details.FailureReason == "Server issue / Other")
+                    res = string.Format(HudsonTrayTrackerResources.BuildFailureMsg_Server_Issue);
+                else if (details.FailureReason == "New Commit")
+                    res = string.Format(HudsonTrayTrackerResources.BuildFailureMsg_New_Commit);
                 return res;
             }
         }
@@ -562,6 +597,9 @@ namespace Hudson.TrayTracker.UI
                 return projectWrapper.LastSuccessBuild;
             if (column == lastFailureGridColumn)
                 return projectWrapper.LastFailureBuild;
+            if (column == lastFailureReasonGridColumn)
+                return projectWrapper.LastFailureReason;
+
             throw new Exception("Column not supported: " + column.Caption);
         }
 
@@ -615,6 +653,11 @@ namespace Hudson.TrayTracker.UI
                 claimedByGridColumn.Visible = false;
                 claimReasonGridColumn.Visible = false;
             }
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
