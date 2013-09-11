@@ -139,6 +139,18 @@ Do you want to download it now (the application will be closed)?</value>
   <data name="BuildFailed_Caption" xml:space="preserve">
     <value>Build failed</value>
   </data>
+  <data name="BuildFailureMsg_New_Commit" xml:space="preserve">
+    <value>New Commit</value>
+  </data>
+  <data name="BuildFailureMsg_Server_Issue" xml:space="preserve">
+    <value>Server Issue / Other</value>
+  </data>
+  <data name="BuildFailure_CommitterName" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="BuildFailure_UserSeparator" xml:space="preserve">
+    <value>,</value>
+  </data>
   <data name="BuildRegressions_Caption" xml:space="preserve">
     <value>Projects regressed</value>
   </data>
