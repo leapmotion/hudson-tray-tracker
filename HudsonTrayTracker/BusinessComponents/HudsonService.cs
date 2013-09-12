@@ -134,6 +134,7 @@ namespace Hudson.TrayTracker.BusinessComponents
                 return null;
 
             String url = NetUtils.ConcatUrls(buildUrl, "/api/xml");
+            BuildDetails res = new BuildDetails();
 
             if (logger.IsDebugEnabled)
                 logger.Debug("Getting build details from " + url);
@@ -149,10 +150,24 @@ namespace Hudson.TrayTracker.BusinessComponents
             string number = xml.SelectSingleNode("/*/number").InnerText;
             string timestamp = xml.SelectSingleNode("/*/timestamp").InnerText;
             XmlNodeList userNodes = xml.SelectNodes("/*/culprit/fullName");
+            XmlNodeList changeNodes = xml.SelectNodes("/*/changeSet/item");
 
             TimeSpan ts = TimeSpan.FromSeconds(long.Parse(timestamp) / 1000);
             DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             date = date.Add(ts);
+
+            int count = changeNodes.Count;
+            if (count == 0)
+            {
+                // No changes were introduced;
+                res.FailureReason = "Server Issue / Other";
+            }
+            else
+            {   
+                // New changeset casued broken build: retrieve a name of the last committer;
+                XmlNode committerNode = changeNodes.Item( count - 1 );
+                res.CommitterName = committerNode.ChildNodes[3].Attributes["fullName"].InnerText;
+            }
 
             ISet<string> users = new HashedSet<string>();
             foreach (XmlNode userNode in userNodes)
@@ -161,7 +176,6 @@ namespace Hudson.TrayTracker.BusinessComponents
                 users.Add(userName);
             }
 
-            BuildDetails res = new BuildDetails();
             res.Number = int.Parse(number);
             res.Time = date;
             res.Users = users;

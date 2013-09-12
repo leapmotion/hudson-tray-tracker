@@ -335,8 +335,7 @@ namespace Hudson.TrayTracker.UI
             {
                 get { return FormatFailureUsers(Project.LastFailedBuild); }
             }
-            
-            
+                  
             public string ClaimedBy
             {
                 get
@@ -381,21 +380,20 @@ namespace Hudson.TrayTracker.UI
                 string res = null;
                 if (details == null)
                     return "-";
-                if (details.FailureReason == "Server issue / Other") 
+                if (details.FailureReason == "Server Issue / Other") 
                     res = StringUtils.Join(details.Users, HudsonTrayTrackerResources.BuildFailure_UserSeparator);
-                else if (details.FailureReason == "New Commit")
+                else
                     res = string.Format(HudsonTrayTrackerResources.BuildFailure_CommitterName, details.CommitterName);
                 return res;
             }
-
             private string FormatLastFailureReason(BuildDetails details)
             {
                 string res = null;
                 if (details == null)
                     return "-";
-                if (details.FailureReason == "Server issue / Other")
+                if (details.FailureReason == "Server Issue / Other")
                     res = string.Format(HudsonTrayTrackerResources.BuildFailureMsg_Server_Issue);
-                else if (details.FailureReason == "New Commit")
+                else
                     res = string.Format(HudsonTrayTrackerResources.BuildFailureMsg_New_Commit);
                 return res;
             }
