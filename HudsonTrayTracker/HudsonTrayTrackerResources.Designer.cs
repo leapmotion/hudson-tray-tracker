@@ -449,5 +449,13 @@ namespace Hudson.TrayTracker {
                 return ResourceManager.GetString("Version_Format", resourceCulture);
             }
         }
+
+        public static string BuildFailure_UserSeparator { get; set; }
+
+        public static IFormatProvider BuildFailure_CommitterName { get; set; }
+
+        public static string BuildFailureMsg_Server_Issue { get; set; }
+
+        public static string BuildFailureMsg_New_Commit { get; set; }
     }
 }
