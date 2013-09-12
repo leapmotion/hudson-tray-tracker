@@ -155,7 +155,7 @@ namespace Hudson.TrayTracker.BusinessComponents
             TimeSpan ts = TimeSpan.FromSeconds(long.Parse(timestamp) / 1000);
             DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             date = date.Add(ts);
-
+           
             int count = changeNodes.Count;
             if (count == 0)
             {
@@ -166,7 +166,7 @@ namespace Hudson.TrayTracker.BusinessComponents
             {   
                 // New changeset casued broken build: retrieve a name of the last committer;
                 XmlNode committerNode = changeNodes.Item( count - 1 );
-                res.CommitterName = committerNode.ChildNodes[3].Attributes["fullName"].InnerText;
+                res.CommitterName = committerNode.ChildNodes[3].LastChild.InnerText;
             }
 
             ISet<string> users = new HashedSet<string>();
