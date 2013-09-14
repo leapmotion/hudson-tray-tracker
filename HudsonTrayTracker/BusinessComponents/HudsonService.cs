@@ -163,10 +163,15 @@ namespace Hudson.TrayTracker.BusinessComponents
                 res.FailureReason = "Server Issue / Other";
             }
             else
-            {   
+            {
                 // New changeset casued broken build: retrieve a name of the last committer;
-                XmlNode committerNode = changeNodes.Item( count - 1 );
-                res.CommitterName = committerNode.ChildNodes[3].LastChild.InnerText;
+                XmlNode committerNode = changeNodes.Item(count - 1);
+                XmlNodeList childNodes = committerNode.ChildNodes;
+                foreach (XmlNode node in childNodes)
+                {
+                    if (node.Name == "author")
+                        res.CommitterName = node.LastChild.InnerText;
+                }
             }
 
             ISet<string> users = new HashedSet<string>();
