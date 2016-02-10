@@ -18,6 +18,7 @@ namespace Hudson.TrayTracker.BusinessComponents
 {
     public class HudsonService
     {
+        public static readonly String buildDetailsFilter = "?tree=number,timestamp,builtOn,culprits[fullName],changeSet[items[*,author[id]]]";
         static readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         [ThreadStatic]
@@ -133,7 +134,7 @@ namespace Hudson.TrayTracker.BusinessComponents
             if (buildUrl == null)
                 return null;
 
-            String url = NetUtils.ConcatUrls(buildUrl, "/api/xml");
+            String url = NetUtils.ConcatUrls(buildUrl, "/api/xml" , buildDetailsFilter);
             BuildDetails res = new BuildDetails();
 
             if (logger.IsDebugEnabled)

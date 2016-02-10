@@ -72,7 +72,7 @@ namespace Hudson.TrayTracker.BusinessComponents
                     throw new Exception("Received response code " + response.StatusCode);
             }
 
-            string buildUrl = NetUtils.ConcatUrls(project.Url, buildDetails.Number.ToString(), "/api/xml");
+            string buildUrl = NetUtils.ConcatUrls(project.Url, buildDetails.Number.ToString(), "/api/xml", HudsonService.buildDetailsFilter);
             HudsonService.RemoveFromCache(buildUrl);
         }
 
